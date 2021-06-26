@@ -1,0 +1,10 @@
+Tests
+
+
+truffle compile
+truffle migrate --network testnet
+truffle run verify DividendsToken@Address --network testnet
+
+
+Contract Created at:
+https://testnet.bscscan.com/token/0xd5a1c2b7239bec0c337f457d4467f4d15e21957d

@@ -1,5 +1,5 @@
-const NSFM = artifacts.require("TVDS10");
+const DividendsToken = artifacts.require("DividendsToken");
 
 module.exports = function (deployer) {
-  deployer.deploy(TVDS10);
+  deployer.deploy(DividendsToken);
 };
