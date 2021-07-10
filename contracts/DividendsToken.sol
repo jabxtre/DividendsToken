@@ -472,7 +472,7 @@ contract DividendsToken is Context, IERC20, Ownable, ReentrancyGuard {
     mapping (address => uint256) private _firstDeposit;
 
     address constant BURN_ADDRESS = 0x0000000000000000000000000000000000000001;
-    address constant CHARITY_ADDRESS = 0x8cc875277a64D9ED35a530d4afe46831365135f6; // NEEDS TO CHANGE
+    address public CHARITY_ADDRESS = 0x8cc875277a64D9ED35a530d4afe46831365135f6; // NEEDS TO CHANGE ONCE IN MAIN
     
     uint256 private constant MAX = ~uint256(0);
     uint256 private constant _tTotal = 1000000000 * 10**6 * 10**9;
@@ -480,14 +480,10 @@ contract DividendsToken is Context, IERC20, Ownable, ReentrancyGuard {
     uint256 private _tHODLrRewardsTotal;
     
     // remove fee after 30 days
-    //  uint256 private _feeRemoveDuration = 30 * 24 * 3600;
+    uint256 private _feeRemoveDuration = 30 * 24 * 3600;
     
-    uint256 private _feeRemoveDuration = 1 * 1 * 3600;
     string private _name = "DividendsToken";
     string private _symbol = "DIVT";
-
-    // string private constant _name = "TVDS12";
-    // string private constant _symbol = "TVDS12";
 
     uint8 private constant _decimals = 9;
     
@@ -513,11 +509,7 @@ contract DividendsToken is Context, IERC20, Ownable, ReentrancyGuard {
 
     constructor () {
         _rOwned[_msgSender()] = _rTotal;
-        // for testnet 0xD99D1c33F9fC3444f8101754aBC46c52416550D1
-        // for mainnet 0x10ED43C718714eb63d5aA57B78B54704E256024E
-        IUniswapV2Router02 _uniswapV2Router = IUniswapV2Router02(0xD99D1c33F9fC3444f8101754aBC46c52416550D1);       // binance PANCAKE V2
-        //IUniswapV2Router02 _uniswapV2Router = IUniswapV2Router02(0x05fF2B0DB69458A0750badebc4f9e13aDd608C7F);     // binance PANCAKE V1
-        //IUniswapV2Router02 _uniswapV2Router = IUniswapV2Router02(0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D);     // Ethereum mainnet, Ropsten, Rinkeby, Görli, and Kovan      
+        IUniswapV2Router02 _uniswapV2Router = IUniswapV2Router02(0x10ED43C718714eb63d5aA57B78B54704E256024E);       // binance PANCAKE V2
         uniswapV2Pair = IUniswapV2Factory(_uniswapV2Router.factory()).createPair(address(this), _uniswapV2Router.WETH());
         uniswapV2Router = _uniswapV2Router;
 
@@ -579,6 +571,7 @@ contract DividendsToken is Context, IERC20, Ownable, ReentrancyGuard {
         return true;
     }
 
+
     function totalRewards() public view returns (uint256) {
         return _tHODLrRewardsTotal;
     }
@@ -595,7 +588,7 @@ contract DividendsToken is Context, IERC20, Ownable, ReentrancyGuard {
         return BURN_ADDRESS;
     }
 
-    function charityAddress() public pure returns (address) {
+    function charityAddress() public view returns (address) {
         return CHARITY_ADDRESS;
     }
     
@@ -640,6 +633,11 @@ contract DividendsToken is Context, IERC20, Ownable, ReentrancyGuard {
             _tOwned[account] = tokenFromReflection(_rOwned[account]);
         }
         EnumerableSet.add(_isExcludedFromReward, account);
+    }
+
+    function changeCharityWallet(address account) public onlyOwner {
+        require(!(CHARITY_ADDRESS == account), "Address is already the CHARITY_ADDRESS");
+        CHARITY_ADDRESS = account;
     }
 
     function includeInReward(address account) external onlyOwner {
@@ -968,5 +966,3 @@ contract DividendsToken is Context, IERC20, Ownable, ReentrancyGuard {
     }
 
 }
-
-

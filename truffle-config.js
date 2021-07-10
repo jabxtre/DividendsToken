@@ -19,10 +19,10 @@
  */
 
 const HDWalletProvider = require('@truffle/hdwallet-provider');
+require('dotenv').config()
 //
 // const fs = require('fs');
 // const mnemonic = fs.readFileSync(".secret").toString().trim();
-const privateKey = "e08335f731c3e80f89a9c99346fc14cfd89a9f7568e9e28d39059c0a4c32636d";
 
 module.exports = {
   /**
@@ -40,7 +40,7 @@ module.exports = {
             ],
   
   api_keys: {
-    bscscan: '7ZV32NQI9ZRFVF4VRPAE3DU9YZFBUAAMQ1'
+    bscscan: process.env.APIKEY
   },
 
   networks: {
@@ -52,7 +52,7 @@ module.exports = {
     },
     testnet: {
       networkCheckTimeout: 999999, 
-      provider: () => new HDWalletProvider(privateKey, `wss://data-seed-prebsc-1-s1.binance.org:8545`),
+      provider: () => new HDWalletProvider(process.env.PKEY, `wss://data-seed-prebsc-1-s1.binance.org:8545`),
       network_id: 97,
       confirmations: 10,
       timeoutBlocks: 200,
@@ -61,10 +61,12 @@ module.exports = {
       skipDryRun: true
     },
     bsc: {
-      provider: () => new HDWalletProvider(privateKey, `https://bsc-dataseed1.binance.org`),
+      provider: () => new HDWalletProvider(process.env.PKEY, `https://bsc-dataseed1.binance.org`),
       network_id: 56,
       confirmations: 10,
       timeoutBlocks: 200,
+      gas: 9000000,
+      wei: 0,
       skipDryRun: true
     }
   },
