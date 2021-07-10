@@ -535,12 +535,6 @@ contract DividendsToken is Context, IERC20, Ownable, ReentrancyGuard {
         return tokenFromReflection(_rOwned[account]);
     }
 
-    function withdraw() external onlyOwner nonReentrant{
-        uint256 balance = IERC20(address(this)).balanceOf(address(this));
-        IERC20(address(this)).transfer(msg.sender, balance);
-        payable(msg.sender).transfer(address(this).balance);
-    }
-
     function transfer(address recipient, uint256 amount) public override returns (bool) {
         _transfer(_msgSender(), recipient, amount);
         return true;
